@@ -13,8 +13,8 @@
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 use crate::{
-    cert, name, signed_data, verify_cert, DnsNameRef, Error, SignatureAlgorithm, Time,
-    TlsClientTrustAnchors, TlsServerTrustAnchors,
+    cert, name, signed_data, verify_cert, DnsNameRef, Error, GeneralDnsNameRef, SignatureAlgorithm,
+    Time, TlsClientTrustAnchors, TlsServerTrustAnchors,
 };
 
 /// An end-entity certificate.
@@ -173,5 +173,18 @@ impl<'a> EndEntityCert<'a> {
             untrusted::Input::from(msg),
             untrusted::Input::from(signature),
         )
+    }
+
+    /// Returns a list of the DNS names provided in the subject alternative names extension
+    ///
+    /// This function must not be used to implement custom DNS name verification.
+    /// Verification functions are already provided as `verify_is_valid_for_dns_name`
+    /// and `verify_is_valid_for_at_least_one_dns_name`.
+    ///
+    /// Requires the `alloc` default feature; i.e. this isn't available in
+    /// `#![no_std]` configurations.
+    #[cfg(feature = "alloc")]
+    pub fn dns_names(&self) -> Result<Vec<GeneralDnsNameRef<'a>>, Error> {
+        name::list_cert_dns_names(&self)
     }
 }
