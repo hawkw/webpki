@@ -703,7 +703,7 @@ fn is_valid_dns_id(
 }
 
 fn is_valid_wildcard_dns_id(hostname: untrusted::Input) -> bool {
-    is_valid_dns_id(hostname, IDRole::ReferenceID, AllowWildcards::Yes)
+    is_valid_dns_id(hostname, IdRole::Reference, AllowWildcards::Yes)
 }
 
 #[cfg(test)]
@@ -914,11 +914,9 @@ mod tests {
                 untrusted::Input::from(reference),
             );
             assert_eq!(
-                actual_result,
-                expected_result,
-                "presented_dns_id_matches_reference_dns_id(\"{:?}\", IDRole::ReferenceID, \"{:?}\")",
-                presented,
-                reference
+                actual_result, expected_result,
+                "presented_dns_id_matches_reference_dns_id(\"{:?}\", IdRole::Reference, \"{:?}\")",
+                presented, reference
             );
         }
     }

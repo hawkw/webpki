@@ -72,7 +72,7 @@ impl<'a> core::convert::TryFrom<&'a [u8]> for EndEntityCert<'a> {
 }
 
 impl<'a> EndEntityCert<'a> {
-    pub(super) fn inner(&self) -> &cert::Cert {
+    pub(super) fn inner(&self) -> &cert::Cert<'a> {
         &self.inner
     }
 
